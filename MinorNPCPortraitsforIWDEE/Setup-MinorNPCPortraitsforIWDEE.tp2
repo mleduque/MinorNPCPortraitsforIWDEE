@@ -1,0 +1,64 @@
+BACKUP ~MinorNPCPortraitsforIWDEE/backup~
+AUTHOR ~Smeagolheart@forum.baldursgate.com~
+VERSION ~1.04~
+
+README ~%MOD_FOLDER%/readme.txt~
+
+/*
+pic size: 169x266
+*/
+
+DEFINE_ACTION_MACRO ~Addpic~ BEGIN
+ACTION_IF FILE_EXISTS_IN_GAME ~%Crename%~
+THEN BEGIN
+COPY_EXISTING ~%Crename%~ ~override~
+ WRITE_EVALUATED_ASCII 0x34 ~%PictureName%~ #8
+END
+ACTION_IF NOT FILE_EXISTS_IN_GAME ~%PictureName%.bmp~ THEN BEGIN
+ACTION_IF NOT FILE_EXISTS ~%MOD_FOLDER%/%folder%/%PictureName%.bmp~
+THEN BEGIN
+END ELSE BEGIN
+COPY  ~%MOD_FOLDER%/%folder%/%PictureName%.bmp~ ~override~
+END
+END
+END
+
+DEFINE_ACTION_MACRO ~NPCPic~ BEGIN
+ACTION_IF FILE_EXISTS_IN_GAME ~%Crename%~
+THEN BEGIN
+COPY_EXISTING ~%Crename%~ ~override~
+ WRITE_EVALUATED_ASCII 0x34 ~%SmallPic%~ #8
+ WRITE_EVALUATED_ASCII 0x3c ~%LargePic%~ #8
+END ELSE BEGIN
+END
+ACTION_IF NOT FILE_EXISTS_IN_GAME ~%MOD_FOLDER%/%folder%/%SmallPic%.bmp~
+THEN BEGIN
+END ELSE BEGIN
+COPY ~%MOD_FOLDER%/%folder%/%SmallPic%.bmp~ ~override~
+END
+ACTION_IF NOT FILE_EXISTS_IN_GAME ~%MOD_FOLDER%/%folder%/%LargePic%.bmp~
+THEN BEGIN
+END ELSE BEGIN
+COPY ~%MOD_FOLDER%/%folder%/%LargePic%.bmp~ ~override~
+END
+END 
+
+BEGIN ~Minor NPC Portraits for IWDEE~
+REQUIRE_PREDICATE GAME_IS iwdee "This mod requires IWD:EE"
+DESIGNATED 0
+
+OUTER_SPRINT ~folder~ ~iwd~
+
+OUTER_SET rows_cnt_nscp=0
+
+COPY - ~%MOD_FOLDER%/tbl/iwd.tbl~  ~%MOD_FOLDER%/tbl/iwd.tbl~
+  COUNT_2DA_ROWS 2 "rows_cnt_nscp"
+  FOR( cntg=0; cntg<"%rows_cnt_nscp%"; cntg=cntg+1 ) BEGIN
+    READ_2DA_ENTRY cntg  0 2 "Crename"
+    READ_2DA_ENTRY cntg  1 2 "PictureName"
+  INNER_ACTION BEGIN
+		LAUNCH_ACTION_MACRO ~Addpic~ 
+	END
+  END
+
+COPY "%MOD_FOLDER%/portraits" override
