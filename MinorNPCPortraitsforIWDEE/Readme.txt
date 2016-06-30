@@ -54,6 +54,10 @@ Thanks everyone you know who you are, I hope you appreciate the hard work of the
 ===================================================================================================================
 
 Version History:
+V1.05	30 Jun 16
+- Moved Mod Location to Github
+- Updated and streamlined code
+
 V1.04	07 Mar 15
 - Updated all portraits with help from bob_veng @ baldursgate.com forums.
 - All portraits reworked and many replaced a new complete reimagining of the mod.
